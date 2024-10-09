@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://4kwallpapers.com/images/wallpapers/landscape-macbook-3840x2160-10760.jpg');
+            background-size: fill; 
+            background-position: center; 
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: rgb(0, 0, 0); 
+        }
+        #taskForm {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        #taskInput {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #addTaskBtn {
+            padding: 10px;
+            margin-left: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #taskList {
+            list-style: none;
+            padding: 0;
+        }
+        .taskItem {
+            background: white;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .taskItem.completed {
+            text-decoration: line-through;
+            background-color: #d3ffd3;
+        }
+        .deleteBtn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Lista de Tareas</h1>
+    <div id="taskForm">
+        <input type="text" id="taskInput" placeholder="Añade una nueva tarea..." />
+        <button id="addTaskBtn">Agregar Tarea</button>
+    </div>
+    <ul id="taskList"></ul>
+
+    <script>
+        const taskInput = document.getElementById('taskInput');
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        const taskList = document.getElementById('taskList');
+
+        let tasks = [];
+
+        // Función para renderizar la lista de tareas
+        function renderTasks() {
+            taskList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.className = `taskItem ${task.completed ? 'completed' : ''}`;
+                li.innerHTML = `
+                    <span>${task.text}</span>
+                    <div>
+                        <button class="deleteBtn" onclick="deleteTask(${index})">Eliminar</button>
+                        <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleComplete(${index})">
+                    </div>
+                `;
+                taskList.appendChild(li);
+            });
+        }
+
+        // Función para agregar tarea
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            if (taskText) {
+                tasks.push({ text: taskText, completed: false });
+                taskInput.value = '';
+                renderTasks();
+            }
+        }
+
+        // Función para eliminar tarea
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            renderTasks();
+        }
+
+        // Función para marcar tarea como completada
+        function toggleComplete(index) {
+            tasks[index].completed = !tasks[index].completed;
+            renderTasks();
+        }
+
+        // Event listeners
+        addTaskBtn.addEventListener('click', addTask);
+        taskInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+    </script>
+
+</body>
+</html>
+
